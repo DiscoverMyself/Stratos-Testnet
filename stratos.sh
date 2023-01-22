@@ -28,7 +28,7 @@ fi
 if [ ! $WALLET ]; then
 	echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
-echo "export STRATOS_CHAIN_ID=tropos-3" >> $HOME/.bash_profile
+echo "export STRATOS_CHAIN_ID=tropos-5" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
 echo '================================================='
@@ -62,42 +62,41 @@ fi
 
 echo -e "\e[1m\e[32m3. Downloading and building binaries... \e[0m" && sleep 1
 # download and build binaries
-cd ~ 
+cd ~
+wget https://github.com/stratosnet/stratos-chain/releases/download/v0.9.0/stchaind
+
+# Make sure the file can be executed
+chmod +x stchaind
+
+# export profile
+echo 'export PATH="$HOME:$PATH"' >> ~/.profile
+source ~/.profile
+
+# Build the extracted source code
 git clone https://github.com/stratosnet/stratos-chain.git
-cd stratos-chain 
-git checkout v0.5.0 
+cd stratos-chain
+git checkout tags/v0.9.0
 make build
 
+# install
+make install
 
 # init
-stchaind init $NODENAME --chain-id $STRATOS_CHAIN_ID
+stchaind init $NODENAME
 
 # download genesis and addrbook
-rm -vf $HOME/.stchaind/config/genesis* $HOME/.stchaind/config/config.toml 
-wget -P $HOME/.stchaind/config/ https://raw.githubusercontent.com/stratosnet/stratos-chain-testnet/main/genesis.json
-wget -P $HOME/.stchaind/config/ https://raw.githubusercontent.com/stratosnet/stratos-chain-testnet/main/config.toml
-sed -i "s/mynode/"$NODENAME"/g" $HOME/.stchaind/config/config.toml
+wget https://raw.githubusercontent.com/stratosnet/stratos-chain-testnet/main/genesis.json
+wget https://raw.githubusercontent.com/stratosnet/stratos-chain-testnet/main/config.toml
+
+# move or replace the genesis file
+mv config.toml $HOME/.stchaind/config/
+mv genesis.json $HOME/.stchaind/config/
 
 
-# create service
-sudo tee <<EOF >/dev/null /etc/systemd/system/stratosd.service
-[Unit]
-Description=Stratos Node
-After=network-online.target
-[Service]
-User=$USER
-ExecStart=/usr/bin/stchaind start
-Restart=always
-RestartSec=10
-LimitNOFILE=10000
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# start service
-sudo systemctl daemon-reload && \
-sudo systemctl enable stratosd && sudo systemctl restart stratosd
+# run the node
+cd
+./stchaind start 2>&1 >> chain.log & 
 
 echo '================ KELAR CUY, SILAHKAN TUNGGU SAMPE SYNC UNTUK LANJUT ===================='
 echo -e 'To check logs: \e[1m\e[32mjournalctl -u stratosd -f -o cat\e[0m'
-echo -e "To check sync status: \e[1m\e[32mstratosd status 2>&1 | jq .SyncInfo\e[0m"
+echo -e "To check sync status: \e[1m\e[32mstchaind status 2>&1 | jq .SyncInfo\e[0m"
