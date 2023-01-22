@@ -70,7 +70,7 @@ make build
 
 
 # init
-stchaind init $NODENAME --chain-id tropos-3
+stchaind init $NODENAME --chain-id $STRATOS_CHAIN_ID
 
 # download genesis and addrbook
 rm -vf $HOME/.stchaind/config/genesis* $HOME/.stchaind/config/config.toml 
