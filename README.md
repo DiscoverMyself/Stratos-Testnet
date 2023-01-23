@@ -119,7 +119,7 @@ stchaind tx staking edit-validator \
  
 **Delegate to Validator**
 ```
-stchaind tx staking delegate $(stchaind tendermint show-validator) 1000000ustos --from $WALLET --chain-id $STRATOS_CHAIN_ID --gas-prices 1000000000wei
+stchaind tx staking delegate $(stchaind keys show wallet --bech val -a) 1000000ustos --from $WALLET --chain-id $STRATOS_CHAIN_ID --gas-prices 1000000000wei
 ```
 
 **Unjail Validator**
