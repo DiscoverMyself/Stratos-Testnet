@@ -1,6 +1,6 @@
 <div classname="logo">
     <p align="center">
-    <img height="200" height="auto" src="https://user-images.githubusercontent.com/78480857/213947479-83fd5d15-ff7d-46bf-9a03-65493d53b22f.jpg">
+    <img height="400" height="auto" src="https://user-images.githubusercontent.com/78480857/213947479-83fd5d15-ff7d-46bf-9a03-65493d53b22f.jpg">
 </div>
 
 
