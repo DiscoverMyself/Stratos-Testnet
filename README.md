@@ -61,7 +61,7 @@ stchaind keys add $WALLET
 ```
 curl --header "Content-Type: application/json" --request POST --data '{"denom":"stos","address":"$(stchaind keys show wallet -a)"} ' https://faucet-tropos.thestratos.org/credit
 ```
-NB: if you found error with `Address is not in the expected format for this chain.root@prame01:~#` you need to change `$(stchaind keys show wallet -a)` with your stratos address `st...`
+NB: if you found error with `Address is not in the expected format for this chain.` you need to change `$(stchaind keys show wallet -a)` with your stratos address `st...`
 
 **Recover wallet**
 ```
