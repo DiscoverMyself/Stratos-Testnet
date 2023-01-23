@@ -25,7 +25,7 @@
 - [Wallet](https://www.thestratos.org/download.html)
 
 ## Hardware requirements
-- OS : Ubuntu Linux 20.04 (LTS) x64
+- OS : Ubuntu Linux 18.04 (LTS) x64 (Minimum Version)
 
 - Read Access Memory : 16 GB (Recommended)
 
