@@ -94,8 +94,23 @@ mv genesis.json $HOME/.stchaind/config/
 
 
 # run the node
-cd
-./stchaind start 2>&1 >> chain.log & 
+sudo tee /etc/systemd/system/stchaind.service > /dev/null <<EOF
+[Unit]
+Description=stratos
+After=network-online.target
+[Service]
+User=$USER
+ExecStart=$(which stchaind) start --home $HOME/.stchaind
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable stchaind
+systemctl restart stchaind
 
 echo '================ KELAR CUY, SILAHKAN TUNGGU SAMPE SYNC UNTUK LANJUT ===================='
 echo -e 'To check logs: \e[1m\e[32mjournalctl -u stratosd -f -o cat\e[0m'
