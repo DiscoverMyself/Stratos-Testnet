@@ -17,7 +17,7 @@ NODE=$(stchaind status | jq -r .NodeInfo.other.rpc_address)
 
 for (( ;; )); do
         echo -e "Get reward from Delegation"
-        echo -e "${password}\ny\n" | stchaind tx distribution withdraw-rewards ${VALIDATOR_ADDRESS} --commission --gas="1000000" --gas-adjustment="1.15" --gas-prices="30000000000aplanq" --chain-id planq_7070-2 --from ${KEY_NAME} --node ${NODE} --yes | grep "raw_log\|txhash"
+        echo -e "${password}\ny\n" | stchaind tx distribution withdraw-rewards ${VALIDATOR_ADDRESS} --commission --gas="1000000" --gas-adjustment="1.15" --gas-prices="30000000000wei" --chain-id tropos-5 --from ${KEY_NAME} --node ${NODE} --yes | grep "raw_log\|txhash"
 for (( timer=10; timer>0; timer-- ))
         do
                 printf "* sleep for ${RED_COLOR}%02d${WITHOUT_COLOR} sec\r" $timer
@@ -26,20 +26,20 @@ for (( timer=10; timer>0; timer-- ))
 BALANCE=$(stchaind query bank balances ${DELEGATOR_ADDRESS} --node ${NODE} -o json | jq -r '.balances | .[].amount')
 echo -e "BALANCE: ${GREEN_COLOR}${BALANCE}${WITHOUT_COLOR} wei\n"
         echo -e "Claim rewards\n"
-        echo -e "${password}\n${password}\n" | stchaind tx distribution withdraw-all-rewards --gas="1000000" --gas-adjustment="1.15" --gas-prices="30000000000wei" --chain-id planq_7070-2 --from ${KEY_NAME} --node ${NODE} --yes | grep "raw_log\|txhash"
+        echo -e "${password}\n${password}\n" | stchaind tx distribution withdraw-all-rewards --gas="1000000" --gas-adjustment="1.15" --gas-prices="30000000000wei" --chain-id tropos-5 --from ${KEY_NAME} --node ${NODE} --yes | grep "raw_log\|txhash"
 for (( timer=10; timer>0; timer-- ))
         do
                 printf "* sleep for ${RED_COLOR}%02d${WITHOUT_COLOR} sec\r" $timer
                 sleep 1
         done
 BALANCE=$(stchaind query bank balances ${DELEGATOR_ADDRESS} --node ${NODE} -o json | jq -r '.balances | .[].amount');
-        TX_AMOUNT=$(bc <<< "$BALANCE - $ONE_PLANQ" )
+        TX_AMOUNT=$(bc <<< "$BALANCE - $ONE_STOS" )
 echo -e "BALANCE: ${GREEN_COLOR}${BALANCE}${WITHOUT_COLOR} wei\n"
         echo -e "Stake ALL\n"
-if awk "BEGIN {return_code=($BALANCE > $ONE_PLANQ) ? 0 : 1; exit} END {exit return_code}";then
-            echo -e "${password}\n${password}\n" | stchaind tx staking delegate ${VALIDATOR_ADDRESS} ${TX_AMOUNT}wei --gas="1000000" --gas-prices="30000000000wei" --gas-adjustment="1.15" --chain-id=planq_7070-2 --from ${KEY_NAME} --node ${NODE}  --yes | grep "raw_log\|txhash"
+if awk "BEGIN {return_code=($BALANCE > $ONE_STOS) ? 0 : 1; exit} END {exit return_code}";then
+            echo -e "${password}\n${password}\n" | stchaind tx staking delegate ${VALIDATOR_ADDRESS} ${TX_AMOUNT}wei --gas="1000000" --gas-prices="30000000000wei" --gas-adjustment="1.15" --chain-id=tropos-5 --from ${KEY_NAME} --node ${NODE}  --yes | grep "raw_log\|txhash"
         else
-                                echo -e "BALANCE: ${GREEN_COLOR}${BALANCE}${WITHOUT_COLOR} wei is lower than $ONE_PLANQ wei\n"
+                                echo -e "BALANCE: ${GREEN_COLOR}${BALANCE}${WITHOUT_COLOR} wei is lower than $ONE_STOS wei\n"
         fi
 for (( timer=${DELAY}; timer>0; timer-- ))
         do
