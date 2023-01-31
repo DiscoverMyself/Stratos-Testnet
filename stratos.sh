@@ -28,6 +28,8 @@ STRATOS_PORT=11
 if [ ! $WALLET ]; then
 	echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
+
+echo "export STRATOS_PORT=$STRATOS_PORT" >> $HOME/.bash_profile
 echo "export STRATOS_CHAIN_ID=tropos-5" >> $HOME/.bash_profile
 source $HOME/.bash_profile
 
