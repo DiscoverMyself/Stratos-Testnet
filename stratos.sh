@@ -24,7 +24,7 @@ if [ ! $NODENAME ]; then
 	read -p "Enter node name: " NODENAME
 	echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 fi
-
+STRARTOS_PORT=11
 if [ ! $WALLET ]; then
 	echo "export WALLET=wallet" >> $HOME/.bash_profile
 fi
@@ -91,6 +91,21 @@ wget https://raw.githubusercontent.com/stratosnet/stratos-chain-testnet/main/con
 # move or replace the genesis file
 mv config.toml $HOME/.stchaind/config/
 mv genesis.json $HOME/.stchaind/config/
+
+# pruning and indexer
+sed -i -e "s%^indexer *=.*%indexer = \"null\"%; " $HOME/.stchaind/config/config.toml
+sed -i -e "s%^pruning *=.*%pruning = \"custom\"%; " $HOME/.stchaind/config/app.toml
+sed -i -e "s%^pruning-keep-recent *=.*%pruning-keep-recent = \"100\"%; " $HOME/.stchaind/config/app.toml
+sed -i -e "s%^pruning-interval *=.*%pruning-interval = \"10\"%; " $HOME/.stchaind/config/app.toml
+
+# set seeds
+sed -i.bak -e "s/^seeds =.*/seeds = \"$seeds\"/" ~/.stchaind/config/config.toml
+sed -i 's/max_num_inbound_peers =.*/max_num_inbound_peers = 100/g' $HOME/.stchaind/config/config.toml
+sed -i 's/max_num_outbound_peers =.*/max_num_outbound_peers = 100/g' $HOME/.stchaind/config/config.toml
+
+# set custom ports
+sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:26658\"%proxy_app = \"tcp://127.0.0.1:${STRATOS_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${STRATOS_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${STRATOS_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${STRATOS_PORT}656\"%; s%^prometheus_listen_addr = \":26660\"%prometheus_listen_addr = \":${STRATOS_PORT}660\"%" $HOME/.stchaind/config/config.toml
+sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${STRATOS_PORT}317\"%; s%^address = \":8080\"%address = \":${STRATOS_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${STRATOS_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${STRATOS_PORT}091\"%" $HOME/.stchaind/config/app.toml
 
 
 # run the node
