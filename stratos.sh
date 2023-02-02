@@ -128,3 +128,4 @@ systemctl restart stchaind
 echo '================ KELAR CUY, SILAHKAN TUNGGU SAMPE SYNC UNTUK LANJUT ===================='
 echo -e 'To check logs: \e[1m\e[32mjournalctl -u stratosd -f -o cat\e[0m'
 echo -e "To check sync status: \e[1m\e[32mstchaind status 2>&1 | jq .SyncInfo\e[0m"
+sleep 5
