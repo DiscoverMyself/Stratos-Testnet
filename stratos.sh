@@ -37,7 +37,7 @@ echo '================================================='
 echo -e "Your node name: \e[1m\e[32m$NODENAME\e[0m"
 echo -e "Your wallet name: \e[1m\e[32m$WALLET\e[0m"
 echo -e "Your chain name: \e[1m\e[32m$STRATOS_CHAIN_ID\e[0m"
-echo -e "Your port: \e[1m\e[32m$STRATOS_PORT\e[0m"
+echo -e "Your port: \e[1m\e[32m'Default'\e[0m"
 echo '================================================='
 sleep 2
 
@@ -102,8 +102,6 @@ sed -i -e "s%^pruning-interval *=.*%pruning-interval = \"10\"%; " $HOME/.stchain
 
 
 # set custom ports
-sed -i.bak -e "s%^proxy_app = \"tcp://127.0.0.1:$(STRATOS_PORT}658\"%proxy_app = \"tcp://127.0.0.1:${STRATOS_PORT}658\"%; s%^laddr = \"tcp://127.0.0.1:26657\"%laddr = \"tcp://127.0.0.1:${STRATOS_PORT}657\"%; s%^pprof_laddr = \"localhost:6060\"%pprof_laddr = \"localhost:${STRATOS_PORT}060\"%; s%^laddr = \"tcp://0.0.0.0:26656\"%laddr = \"tcp://0.0.0.0:${STRATOS_PORT}656\"%; s%^prometheus_listen_addr = \":${STRATOS_PORT}660\"%prometheus_listen_addr = \":${STRATOS_PORT}660\"%" $HOME/.stchaind/config/config.toml
-sed -i.bak -e "s%^address = \"tcp://0.0.0.0:1317\"%address = \"tcp://0.0.0.0:${STRATOS_PORT}317\"%; s%^address = \":8080\"%address = \":${STRATOS_PORT}080\"%; s%^address = \"0.0.0.0:9090\"%address = \"0.0.0.0:${STRATOS_PORT}090\"%; s%^address = \"0.0.0.0:9091\"%address = \"0.0.0.0:${STRATOS_PORT}091\"%" $HOME/.stchaind/config/app.toml
 
 
 # run the node
